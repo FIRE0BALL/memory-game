@@ -1,0 +1,211 @@
+
+
+#define CHOICE_OFF 0
+#define CHOICE_NONE 0
+#define CHOICE_RED  (1 << 0)
+#define CHOICE_GREEN    (1 << 3)
+#define CHOICE_BLUE (1 << 1)
+#define CHOICE_YELLOW   (1 << 2)
+
+#define LED_RED     3
+#define LED_GREEN   9
+#define LED_BLUE    5
+#define LED_YELLOW  7
+
+// Button pin definitions
+#define BUTTON_RED    2
+#define BUTTON_GREEN  8
+#define BUTTON_BLUE   4
+#define BUTTON_YELLOW 6
+
+// Buzzer pin definitions
+#define BUZZER1  10
+#define BUZZER2  12
+
+// Define game parameters
+#define ROUNDS_TO_WIN 12
+#define ENTRY_TIME_LIMIT 3000
+
+#define MODE_MEMORY 0
+#define MODE_BATTLE 1
+
+byte gameMode = MODE_MEMORY;
+byte gameBoard[16];
+byte gameRound = 0;
+
+
+void setup()
+{
+  pinMode(BUTTON_RED, INPUT_PULLUP);
+  pinMode(BUTTON_GREEN, INPUT_PULLUP);
+  pinMode(BUTTON_BLUE, INPUT_PULLUP);
+  pinMode(BUTTON_YELLOW, INPUT_PULLUP);
+
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+  pinMode(LED_YELLOW, OUTPUT);
+
+  pinMode(BUZZER1, OUTPUT);
+  pinMode(BUZZER2, OUTPUT);
+
+  gameMode = MODE_MEMORY;
+  if (checkButton() == CHOICE_GREEN)
+  {
+    gameMode = MODE_BATTLE;
+    setLEDs(CHOICE_GREEN);
+    toner(CHOICE_GREEN, 150);
+    setLEDs(CHOICE_RED | CHOICE_BLUE | CHOICE_YELLOW);
+    while(checkButton() != CHOICE_NONE);
+  }
+  play_winner();  
+}
+
+void loop()
+{
+  attractMode();
+  setLEDs(CHOICE_RED | CHOICE_GREEN | CHOICE_BLUE | CHOICE_YELLOW);
+  delay(1000);
+  setLEDs(CHOICE_OFF);
+  delay(250);
+  if (gameMode == MODE_MEMORY)
+    play_memory() ? play_winner() : play_loser();
+  if (gameMode == MODE_BATTLE) {
+    play_battle();
+    play_loser();
+  }
+}
+
+boolean play_memory(void)
+{
+  randomSeed(millis());
+  gameRound = 0;
+
+  while (gameRound < ROUNDS_TO_WIN) {
+    add_to_moves();
+    playMoves();
+    for (byte currentMove = 0; currentMove < gameRound; currentMove++) {
+      byte choice = wait_for_button();
+      if (choice == 0 || choice != gameBoard[currentMove]) return false;
+    }
+    delay(1000);
+  }
+  return true;
+}
+
+boolean play_battle(void)
+{
+  gameRound = 0;
+  while (1) {
+    gameBoard[gameRound++] = wait_for_button();
+    for (byte currentMove = 0; currentMove < gameRound; currentMove++) {
+      byte choice = wait_for_button();
+      if (choice == 0 || choice != gameBoard[currentMove]) return false;
+    }
+    delay(100);
+  }
+}
+
+void playMoves(void)
+{
+  for (byte currentMove = 0; currentMove < gameRound; currentMove++) {
+    toner(gameBoard[currentMove], 150);
+    delay(150);
+  }
+}
+
+void add_to_moves(void)
+{
+  byte choices[] = {CHOICE_RED, CHOICE_GREEN, CHOICE_BLUE, CHOICE_YELLOW};
+  gameBoard[gameRound++] = choices[random(0, 4)];
+}
+
+
+void setLEDs(byte leds)
+{
+  byte pins[] = {LED_RED, LED_BLUE, LED_YELLOW, LED_GREEN};
+  byte choices[] = {CHOICE_RED, CHOICE_BLUE, CHOICE_YELLOW, CHOICE_GREEN};
+  for(byte i = 0; i < 4; i++)
+    digitalWrite(pins[i], (leds & choices[i]) ? HIGH : LOW);
+}
+
+byte wait_for_button(void)
+{
+  long startTime = millis();
+  while ((millis() - startTime) < ENTRY_TIME_LIMIT) {
+    byte button = checkButton();
+    if (button != CHOICE_NONE) {
+      toner(button, 150);
+      while(checkButton() != CHOICE_NONE);
+      delay(10);
+      return button;
+    }
+  }
+  return CHOICE_NONE;
+}
+
+byte checkButton(void)
+{
+  byte pins[] = {BUTTON_RED, BUTTON_GREEN, BUTTON_BLUE, BUTTON_YELLOW};
+  byte choices[] = {CHOICE_RED, CHOICE_GREEN, CHOICE_BLUE, CHOICE_YELLOW};
+  for(byte i = 0; i < 4; i++)
+    if (digitalRead(pins[i]) == 0) return choices[i];
+  return CHOICE_NONE;
+}
+
+void toner(byte which, int buzz_length_ms)
+{
+  setLEDs(which);
+  int delays[] = {1136, 851, 638, 568};
+  byte choices[] = {CHOICE_RED, CHOICE_BLUE, CHOICE_YELLOW, CHOICE_GREEN};
+  for(byte i = 0; i < 4; i++)
+    if(which == choices[i]) { buzz_sound(buzz_length_ms, delays[i]); break; }
+  setLEDs(CHOICE_OFF);
+}
+
+void buzz_sound(int buzz_length_ms, int buzz_delay_us)
+{
+  long buzz_length_us = buzz_length_ms * 1000L;
+  while (buzz_length_us > (buzz_delay_us * 2)) {
+    buzz_length_us -= buzz_delay_us * 2;
+    digitalWrite(BUZZER1, LOW); digitalWrite(BUZZER2, HIGH); delayMicroseconds(buzz_delay_us);
+    digitalWrite(BUZZER1, HIGH); digitalWrite(BUZZER2, LOW); delayMicroseconds(buzz_delay_us);
+  }
+}
+
+void play_winner(void)
+{
+  for(byte i = 0; i < 4; i++) {
+    setLEDs((i % 2) ? (CHOICE_RED | CHOICE_YELLOW) : (CHOICE_GREEN | CHOICE_BLUE));
+    for (byte x = 250; x > 70; x--)
+      for (byte y = 0; y < 3; y++) {
+        digitalWrite(BUZZER2, HIGH); digitalWrite(BUZZER1, LOW); delayMicroseconds(x);
+        digitalWrite(BUZZER2, LOW); digitalWrite(BUZZER1, HIGH); delayMicroseconds(x);
+      }
+  }
+}
+
+void play_loser(void)
+{
+  for(byte i = 0; i < 4; i++) {
+    setLEDs((i % 2) ? (CHOICE_BLUE | CHOICE_YELLOW) : (CHOICE_RED | CHOICE_GREEN));
+    buzz_sound(255, 1500);
+  }
+}
+
+void attractMode(void)
+{
+  byte leds[] = {CHOICE_RED, CHOICE_BLUE, CHOICE_GREEN, CHOICE_YELLOW};
+  while(1) {
+    for(byte i = 0; i < 4; i++) {
+      setLEDs(leds[i]);
+      delay(100);
+      if (checkButton() != CHOICE_NONE) return;
+    }
+  }
+}
+
+
+
+
+
