@@ -63,25 +63,17 @@ The project was implemented in the following steps:
    * Advance to the next level if the sequence is correct or signal a loss if incorrect.
 
 3. **Game Levels:**
-   The game was designed with **11 levels**.
+   The game was designed with **12 levels**.
 
    * **Level 1:** The player memorizes and reproduces a single LED blink.
-   * **Level 2–11:** With each level, the length of the sequence increases by one, requiring the player to remember more complex patterns.
-
+   * **Level 2–12:** With each level, the length of the sequence increases by one, requiring the player to remember more complex patterns.
+   * **The game still requires 12 rounds to win, and the player has a 3-second time limit to respond.
+  
 4. **Feedback System:**
    A **buzzer** was used to give audio feedback:
 
    * A short beep indicated blink and button pressed.
    * A long beep indicated a mistake and the end of the game.
-
----
-
-## **6. Results and Outcome**
-
-* The project was successfully demonstrated at the **Khalsa College Science Festival (Nov 2024)**.
-* It attracted significant attention and engagement due to its **competitive and interactive** nature.
-* Visitors enjoyed challenging themselves to progress through the 11 levels of increasing difficulty.
-* The project showcased the application of **microcontroller programming**, **basic electronics**, and **logical thinking** in building a real-world interactive system.
 
 ---
 
@@ -101,8 +93,6 @@ The project reinforced key skills in circuit design, programming, and logical pr
 ---
 
 **Prepared by:**
-[Gavish Sharma]
-Department of Mechanical Engineering
-Guru Nanak Dev University
+Gavish Sharma
 
 ---
