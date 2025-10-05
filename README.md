@@ -12,7 +12,8 @@
 This project, titled **"LED Memory Game"**, is an interactive electronic game inspired by the classic **"Simon Says"** memory challenge. It was designed and developed to present at **Khalsa College Science Festival held in November 2024**, where we were showcasing Robotics desk form our **Department of Mechanical Engineering, Guru Nanak Dev University**.
 
 The purpose of this project was to demonstrate how simple electronic components and microcontroller programming can be combined to create an engaging and competitive memory-based game. It was well-received at the festival and became one of the main attractions due to its interactive nature and competitive gameplay.
-
+**![MEMORYGAMEGIF-min](https://github.com/user-attachments/assets/b4b36331-2fa2-4a01-9632-30e049d89792)
+**
 ---
 
 ## **2. Objective**
