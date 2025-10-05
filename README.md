@@ -47,6 +47,10 @@ As the player progresses through levels, the **length and complexity** of the LE
 
 ---
 
+
+<img width="1270" height="686" alt="LED memory game" src="https://github.com/user-attachments/assets/6d06a031-54b7-4c5c-94a0-628a1fe1fe4b" />
+
+
 ## **5. Implementation and Methodology**
 
 The project was implemented in the following steps:
