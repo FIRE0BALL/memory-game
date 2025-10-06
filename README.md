@@ -100,5 +100,6 @@ The project reinforced key skills in circuit design, programming, and logical pr
 
 **Prepared by:**
 Gavish Sharma
+<img src="[your-image-url](https://github.com/user-attachments/assets/c0c095cf-e222-40c6-91b3-44e0d205206d)" alt="description" width="100" height="75">
 
 ---
