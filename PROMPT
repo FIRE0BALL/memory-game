@@ -1,0 +1,53 @@
+"Write complete Arduino code for a Simon Says memory game with these specifications:
+
+HARDWARE:
+- LEDs on pins: red(3), green(9), blue(5), yellow(7)
+- Buttons on pins: red(2), green(8), blue(4), yellow(6) with INPUT_PULLUP
+- Buzzer on pins: 10 and 12
+- Use bitmask operations for efficient LED control
+
+GAME FEATURES:
+- Memory mode: computer generates sequences, player repeats (12 rounds to win)
+- Battle mode: two players take turns creating sequences
+- 3-second time limit per input
+- Random sequence generation
+- Visual and audio feedback for each color
+
+FUNCTIONS NEEDED:
+- setup(): initialize pins and game mode selection
+- loop(): main game loop with attract mode
+- play_memory(): memory game logic
+- play_battle(): two-player battle logic
+- wait_for_button(): get player input with timeout
+- playMoves(): display sequence to memorize
+- toner(): play sound and light for each color
+- play_winner()/play_loser(): end game animations
+
+GAME FLOW:
+1. Startup mode selection (hold green button for battle mode)
+2. Attract mode with flashing LEDs
+3. Gameplay with increasing difficulty
+4. Win/lose animations
+
+
+
+
+
+
+
+"Generate Arduino code for a Simon game using these components:
+- 4 push buttons with pull-up resistors
+- 4 LEDs (different colors)
+- Piezo buzzer
+- Implement these game mechanics:
+  * Sequence generation and playback
+  * Player input detection with debouncing
+  * Progressive difficulty (longer sequences)
+  * Two game modes: single-player and versus
+  * Audio-visual feedback for each color
+  * Time-limited responses
+  * Win/lose animations
+
+Make the code well-structured with separate functions for each game feature."
+
+Include proper comments and use efficient coding practices."
